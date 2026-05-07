@@ -42,3 +42,10 @@ select option {
   background-color: #1e1e1e;
   color: #ffffff;
 }
+
+/* Prevent iOS Safari auto-zoom on input focus */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
