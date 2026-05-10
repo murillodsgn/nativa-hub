@@ -1,0 +1,98 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   NuevaVentaForm — ALL spacing lives here.
+   Physical properties only. No padding-inline / margin-block.
+   Never add padding or margin directly to the .tsx file.
+───────────────────────────────────────────────────────────────────────────── */
+
+.inner {
+  padding-top: 1.5rem;
+  padding-right: 1rem;
+  padding-bottom: 1.5rem;
+  padding-left: 1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.sectionLabel {
+  margin-bottom: 0.75rem;
+}
+
+.itemCard {
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+}
+
+.itemControls {
+  margin-top: 0.75rem;
+}
+
+.deleteBtn {
+  padding-top: 0.5rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.subtotalPush {
+  margin-left: auto;
+}
+
+.planSection {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+}
+
+.planLabel {
+  margin-bottom: 0.5rem;
+}
+
+.planDeleteBtn {
+  padding-top: 0.375rem;
+  padding-right: 0.375rem;
+  padding-bottom: 0.375rem;
+  padding-left: 0.375rem;
+}
+
+.planAddBtn {
+  margin-top: 0.5rem;
+}
+
+.addProductBtn {
+  margin-top: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.paymentCard {
+  padding-top: 0.75rem;
+  padding-right: 0.25rem;
+  padding-bottom: 0.75rem;
+  padding-left: 0.25rem;
+}
+
+.referenceInput {
+  margin-top: 0.75rem;
+}
+
+.summaryCard {
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+}
+
+.summaryLabel {
+  margin-bottom: 1rem;
+}
+
+.totalRow {
+  padding-top: 0.75rem;
+}

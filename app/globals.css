@@ -43,6 +43,15 @@ select option {
   color: #ffffff;
 }
 
+/* Hide number input spinner arrows */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 /* Prevent iOS Safari auto-zoom on input focus */
 @media (max-width: 768px) {
   input, select, textarea {

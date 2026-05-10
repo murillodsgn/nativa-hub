@@ -8,6 +8,7 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { X, Warehouse, Store, AlertTriangle, Clock, Gift } from "lucide-react";
+import { Stepper } from "@/components/ui/stepper";
 import { ORIGIN_LABELS } from "../types";
 import type { Product, ActionState, MovementWithUser } from "../types";
 
@@ -22,7 +23,7 @@ function Backdrop({
 }) {
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+      className="fixed top-0 left-0 right-0 bottom-0 z-40 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       {children}
@@ -135,34 +136,7 @@ export function AddStockModal({
 
         <div className="space-y-1.5">
           <Label>Cantidad a agregar</Label>
-          <div className="flex items-center rounded-lg border border-white/10 bg-white/5 overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
-              disabled={isPending || qty <= 1}
-              className="px-4 py-3 text-white/60 hover:text-white hover:bg-white/8 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-lg leading-none select-none"
-            >
-              −
-            </button>
-            <input
-              type="number"
-              value={qty}
-              onChange={(e) => {
-                const v = parseInt(e.target.value, 10);
-                if (!isNaN(v) && v >= 1) setQty(v);
-              }}
-              disabled={isPending}
-              className="flex-1 bg-transparent text-center text-base font-medium text-white tabular-nums focus:outline-none py-3 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-            />
-            <button
-              type="button"
-              onClick={() => setQty((q) => q + 1)}
-              disabled={isPending}
-              className="px-4 py-3 text-white/60 hover:text-white hover:bg-white/8 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-lg leading-none select-none"
-            >
-              +
-            </button>
-          </div>
+          <Stepper value={qty} onChange={setQty} disabled={isPending} />
         </div>
 
         <div className="space-y-1.5">
@@ -187,13 +161,13 @@ export function AddStockModal({
 
   if (isMobile) {
     return (
-      <div className={["fixed inset-0 z-50 bg-[#1a1a1a] flex flex-col", "transition-opacity duration-200", visible ? "opacity-100" : "opacity-0"].join(" ")}>
+      <div className={["fixed top-0 left-0 right-0 bottom-0 z-50 bg-[#1a1a1a] flex flex-col", "transition-opacity duration-200", visible ? "opacity-100" : "opacity-0"].join(" ")}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 shrink-0">
           <div className="min-w-0">
             <p className="text-base font-medium text-white leading-tight">Agregar</p>
             <p className="text-sm text-white/40 truncate mt-0.5">{product.name}</p>
           </div>
-          <button onClick={onClose} className="p-2 ml-3 rounded-full bg-white/10 text-white/70 hover:text-white transition-colors shrink-0" aria-label="Cerrar">
+          <button onClick={onClose} className="ml-3 p-2 rounded-full flex items-center justify-center min-h-[44px] min-w-[44px] bg-white/10 text-white/70 hover:text-white hover:bg-white/16 transition-colors shrink-0" aria-label="Cerrar">
             <X size={20} />
           </button>
         </div>
@@ -316,34 +290,7 @@ export function DeductStockModal({
           {/* Cantidad stepper */}
           <div className="space-y-1.5">
             <Label>Cantidad</Label>
-            <div className="flex items-center rounded-lg border border-white/10 bg-white/5 overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setQty((q) => Math.max(1, q - 1))}
-                disabled={isPending || qty <= 1}
-                className="px-4 py-3 text-white/60 hover:text-white hover:bg-white/8 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-lg leading-none select-none"
-              >
-                −
-              </button>
-              <input
-                type="number"
-                value={qty}
-                onChange={(e) => {
-                  const v = parseInt(e.target.value, 10);
-                  if (!isNaN(v) && v >= 1) setQty(v);
-                }}
-                disabled={isPending}
-                className="flex-1 bg-transparent text-center text-base font-medium text-white tabular-nums focus:outline-none py-3 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-              <button
-                type="button"
-                onClick={() => setQty((q) => q + 1)}
-                disabled={isPending}
-                className="px-4 py-3 text-white/60 hover:text-white hover:bg-white/8 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-lg leading-none select-none"
-              >
-                +
-              </button>
-            </div>
+            <Stepper value={qty} onChange={setQty} disabled={isPending} />
           </div>
 
           {/* Razón — radio cards */}
@@ -405,13 +352,13 @@ export function DeductStockModal({
 
   if (isMobile) {
     return (
-      <div className={["fixed inset-0 z-50 bg-[#1a1a1a] flex flex-col", "transition-opacity duration-200", visible ? "opacity-100" : "opacity-0"].join(" ")}>
+      <div className={["fixed top-0 left-0 right-0 bottom-0 z-50 bg-[#1a1a1a] flex flex-col", "transition-opacity duration-200", visible ? "opacity-100" : "opacity-0"].join(" ")}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 shrink-0">
           <div className="min-w-0">
             <p className="text-base font-medium text-white leading-tight">Descontar</p>
             <p className="text-sm text-white/40 truncate mt-0.5">{product.name}</p>
           </div>
-          <button onClick={onClose} className="p-2 ml-3 rounded-full bg-white/10 text-white/70 hover:text-white transition-colors shrink-0" aria-label="Cerrar">
+          <button onClick={onClose} className="ml-3 p-2 rounded-full flex items-center justify-center min-h-[44px] min-w-[44px] bg-white/10 text-white/70 hover:text-white hover:bg-white/16 transition-colors shrink-0" aria-label="Cerrar">
             <X size={20} />
           </button>
         </div>
@@ -492,34 +439,12 @@ export function TransferModal({
         {/* Cantidad stepper */}
         <div className="space-y-1.5">
           <Label>Cantidad</Label>
-          <div className="flex items-center rounded-lg border border-white/10 bg-white/5 overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
-              disabled={isPending || noStock || qty <= 1}
-              className="px-4 py-3 text-white/60 hover:text-white hover:bg-white/8 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-lg leading-none select-none"
-            >
-              −
-            </button>
-            <input
-              type="number"
-              value={qty}
-              onChange={(e) => {
-                const v = parseInt(e.target.value, 10);
-                if (!isNaN(v) && v >= 1 && v <= product.factory_stock) setQty(v);
-              }}
-              disabled={isPending || noStock}
-              className="flex-1 bg-transparent text-center text-base font-medium text-white tabular-nums focus:outline-none py-3 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-            />
-            <button
-              type="button"
-              onClick={() => setQty((q) => Math.min(product.factory_stock, q + 1))}
-              disabled={isPending || noStock || qty >= product.factory_stock}
-              className="px-4 py-3 text-white/60 hover:text-white hover:bg-white/8 transition-colors disabled:opacity-30 disabled:cursor-not-allowed text-lg leading-none select-none"
-            >
-              +
-            </button>
-          </div>
+          <Stepper
+            value={qty}
+            onChange={setQty}
+            disabled={isPending || noStock}
+            max={product.factory_stock}
+          />
         </div>
 
         {/* Notas */}
@@ -556,13 +481,13 @@ export function TransferModal({
 
   if (isMobile) {
     return (
-      <div className={["fixed inset-0 z-50 bg-[#1a1a1a] flex flex-col", "transition-opacity duration-200", visible ? "opacity-100" : "opacity-0"].join(" ")}>
+      <div className={["fixed top-0 left-0 right-0 bottom-0 z-50 bg-[#1a1a1a] flex flex-col", "transition-opacity duration-200", visible ? "opacity-100" : "opacity-0"].join(" ")}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/8 shrink-0">
           <div className="min-w-0">
             <p className="text-base font-medium text-white leading-tight">Transferir a tienda</p>
             <p className="text-sm text-white/40 truncate mt-0.5">{product.name}</p>
           </div>
-          <button onClick={onClose} className="p-2 ml-3 rounded-full bg-white/10 text-white/70 hover:text-white transition-colors shrink-0" aria-label="Cerrar">
+          <button onClick={onClose} className="ml-3 p-2 rounded-full flex items-center justify-center min-h-[44px] min-w-[44px] bg-white/10 text-white/70 hover:text-white hover:bg-white/16 transition-colors shrink-0" aria-label="Cerrar">
             <X size={20} />
           </button>
         </div>
@@ -810,7 +735,7 @@ export function MovementsModal({
     return (
       <div
         className={[
-          "fixed inset-0 z-50 bg-[#1a1a1a] flex flex-col",
+          "fixed top-0 left-0 right-0 bottom-0 z-50 bg-[#1a1a1a] flex flex-col",
           "transition-opacity duration-200",
           visible ? "opacity-100" : "opacity-0",
         ].join(" ")}
@@ -835,7 +760,7 @@ export function MovementsModal({
 
   return (
     <div
-      className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4"
+      className="fixed top-0 left-0 right-0 bottom-0 z-40 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4"
       onClick={onClose}
     >
       {/*

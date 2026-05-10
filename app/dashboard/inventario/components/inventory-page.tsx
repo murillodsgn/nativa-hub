@@ -150,10 +150,17 @@ function DropdownMenu({
 }) {
   return (
     <>
-      <div className="hidden lg:block fixed inset-0 z-40" onClick={onClose} />
+      <div className="hidden lg:block fixed top-0 left-0 right-0 bottom-0 z-40" onClick={onClose} />
       <div
-        className="hidden lg:block fixed z-50 w-52 rounded-lg bg-[#242424] border border-white/10 shadow-2xl py-1"
-        style={{ top: pos.top, right: pos.right }}
+        className="hidden lg:block fixed z-50 w-52 py-1"
+        style={{
+          top: pos.top,
+          right: pos.right,
+          backgroundColor: '#242424',
+          border: '1px solid rgba(255, 255, 255, 0.10)',
+          borderRadius: '8px',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.8)',
+        }}
       >
         {menuOptions(role).map((o) => {
           const disabled = o.type === "transfer" && product.factory_stock === 0;
@@ -205,12 +212,12 @@ function BottomSheet({
   return (
     <>
       <div
-        className="hidden md:block lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+        className="hidden md:block lg:hidden fixed top-0 left-0 right-0 bottom-0 z-40 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
       <div
         className={[
-          "hidden md:flex lg:hidden fixed inset-x-0 bottom-0 z-50 flex-col bg-[#1a1a1a] border-t border-white/10 rounded-t-2xl",
+          "hidden md:flex lg:hidden fixed left-0 right-0 bottom-0 z-50 flex-col bg-[#1a1a1a] border-t border-white/10 rounded-t-2xl",
           "transition-transform duration-300 ease-out",
           visible ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
@@ -276,7 +283,7 @@ function FullScreenMenu({
   return (
     <div
       className={[
-        "fixed inset-0 z-50 bg-[#0a0a0a] flex flex-col",
+        "fixed top-0 left-0 right-0 bottom-0 z-50 bg-[#0a0a0a] flex flex-col",
         "transition-opacity duration-200",
         visible ? "opacity-100" : "opacity-0",
       ].join(" ")}
@@ -360,7 +367,7 @@ function ProductCards({
               <button
                 onClick={(e) => onMenuClick(e, p.id)}
                 className={[
-                  "p-1.5 rounded-md transition-colors",
+                  "p-1.5 rounded-md min-h-[44px] min-w-[44px] transition-colors",
                   openMenuId === p.id
                     ? "text-white bg-white/10"
                     : "text-white/50 hover:text-white hover:bg-white/8",
@@ -374,19 +381,19 @@ function ProductCards({
             <div className="grid grid-cols-2 gap-x-6 gap-y-3">
               <div>
                 <p className="text-sm md:text-xs text-white/40 mb-1">Stock fábrica</p>
-                <p className="text-3xl md:text-base"><StockValue value={p.factory_stock} /></p>
+                <p className="text-2xl md:text-base"><StockValue value={p.factory_stock} /></p>
               </div>
               <div>
                 <p className="text-sm md:text-xs text-white/40 mb-1">Stock tienda</p>
-                <p className="text-3xl md:text-base"><StockValue value={p.store_stock} /></p>
+                <p className="text-2xl md:text-base"><StockValue value={p.store_stock} /></p>
               </div>
               <div>
                 <p className="text-sm md:text-xs text-white/40 mb-1">Total</p>
-                <p className="text-3xl md:text-base font-medium text-white/80 tabular-nums">{total}</p>
+                <p className="text-2xl md:text-base font-medium text-white/80 tabular-nums">{total}</p>
               </div>
               <div>
                 <p className="text-sm md:text-xs text-white/40 mb-1">Valor en stock</p>
-                <p className="text-3xl md:text-base text-white/60 tabular-nums">{formatCurrency(total * p.price)}</p>
+                <p className="text-2xl md:text-base text-white/60 tabular-nums">{formatCurrency(total * p.price)}</p>
               </div>
             </div>
           </div>

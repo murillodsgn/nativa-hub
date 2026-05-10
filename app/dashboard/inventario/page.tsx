@@ -15,6 +15,7 @@ export default async function InventarioRoute() {
     supabase
       .from("products")
       .select("id, name, unit, price, factory_stock, store_stock, active")
+      .eq("is_plan", false)
       .order("name"),
     supabase.from("profiles").select("role").eq("id", user.id).maybeSingle(),
   ]);

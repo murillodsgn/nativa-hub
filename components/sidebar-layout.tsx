@@ -88,7 +88,7 @@ function NavLinks({
             href={item.href}
             onClick={onNavigate}
             className={[
-              "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+              "flex items-center gap-3 px-3 py-2.5 min-h-[44px] lg:min-h-0 rounded-lg text-sm font-medium transition-colors",
               active
                 ? "bg-[#F1DAE7]/10 text-[#F1DAE7]"
                 : "text-white/50 hover:text-white hover:bg-white/6",
@@ -114,7 +114,7 @@ function UserFooter({ userName }: { userName: string }) {
       <form action={logout}>
         <button
           type="submit"
-          className="flex items-center gap-2 text-sm text-white/40 hover:text-white transition-colors"
+          className="flex items-center gap-2 min-h-[44px] lg:min-h-0 text-sm text-white/40 hover:text-white transition-colors"
         >
           <LogOut size={15} strokeWidth={1.75} />
           Cerrar sesión
@@ -160,7 +160,7 @@ function MobileFullscreenNav({
   return (
     <div
       className={[
-        "md:hidden fixed inset-0 z-50 bg-[#0a0a0a] flex flex-col",
+        "md:hidden fixed top-0 left-0 right-0 bottom-0 z-50 bg-[#0a0a0a] flex flex-col",
         "transition-opacity duration-200",
         visible ? "opacity-100" : "opacity-0",
       ].join(" ")}
@@ -185,14 +185,14 @@ function MobileFullscreenNav({
               href={item.href}
               onClick={onClose}
               className={[
-                "flex items-center gap-4 px-4 py-4 rounded-xl text-xl font-medium transition-colors",
+                "flex items-center gap-4 px-4 py-4 rounded-xl text-[18px] font-medium transition-colors",
                 active
                   ? "bg-[#F1DAE7]/10 text-[#F1DAE7]"
                   : "text-white/60 hover:text-white hover:bg-white/8",
               ].join(" ")}
             >
               <item.icon
-                size={24}
+                size={18}
                 strokeWidth={active ? 2 : 1.75}
                 className={active ? "text-[#F1DAE7]" : "text-white/40"}
               />
@@ -207,7 +207,7 @@ function MobileFullscreenNav({
         <form action={logout}>
           <button
             type="submit"
-            className="flex items-center gap-2 text-base text-white/40 hover:text-white transition-colors"
+            className="flex items-center gap-2 min-h-[44px] text-base text-white/40 hover:text-white transition-colors"
           >
             <LogOut size={18} strokeWidth={1.75} />
             Cerrar sesión
@@ -245,7 +245,7 @@ export function SidebarLayout({ children, userName, role }: Props) {
         <header className="lg:hidden flex items-center gap-3 px-4 h-14 border-b border-white/8 bg-[#141414] shrink-0">
           <button
             onClick={() => setMobileOpen(true)}
-            className="p-2 -ml-1 rounded-md text-white/60 hover:text-white hover:bg-white/8 transition-colors"
+            className="p-2 -ml-1 rounded-md min-h-[44px] min-w-[44px] text-white/60 hover:text-white hover:bg-white/8 transition-colors"
             aria-label="Abrir menú"
           >
             <Menu size={20} className="w-6 h-6 md:w-5 md:h-5" />
@@ -274,7 +274,7 @@ export function SidebarLayout({ children, userName, role }: Props) {
       {/* ── Tablet overlay ── */}
       {mobileOpen && (
         <div
-          className="hidden md:block lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          className="hidden md:block lg:hidden fixed top-0 left-0 right-0 bottom-0 z-40 bg-black/60 backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
@@ -283,7 +283,7 @@ export function SidebarLayout({ children, userName, role }: Props) {
       {/* ── Tablet drawer ── */}
       <aside
         className={[
-          "hidden md:flex lg:hidden fixed inset-y-0 left-0 z-50 flex-col w-64 bg-[#141414] border-r border-white/8",
+          "hidden md:flex lg:hidden fixed top-0 bottom-0 left-0 z-50 flex-col w-64 bg-[#141414] border-r border-white/8",
           "transition-transform duration-300 ease-out",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
         ].join(" ")}
@@ -294,7 +294,7 @@ export function SidebarLayout({ children, userName, role }: Props) {
           <LeafLogo />
           <button
             onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded-md text-white/50 hover:text-white hover:bg-white/8 transition-colors"
+            className="p-1.5 rounded-md min-h-[44px] min-w-[44px] text-white/50 hover:text-white hover:bg-white/8 transition-colors"
             aria-label="Cerrar menú"
           >
             <X size={18} />
