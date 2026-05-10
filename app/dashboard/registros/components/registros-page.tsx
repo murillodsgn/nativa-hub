@@ -1049,7 +1049,7 @@ function TurnosTab({
   }
 
   async function handleIniciarTurno() {
-    setActiveShift({ id: 0, started_at: new Date().toISOString() });
+    setActiveShift({ id: 0, started_at: new Date().toISOString(), retiro_amount: 0 });
     const result = await iniciarTurno();
     if ("error" in result) {
       setActiveShift(null);
