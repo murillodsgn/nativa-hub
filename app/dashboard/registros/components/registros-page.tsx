@@ -919,9 +919,12 @@ function TurnosCards({
       {shifts.map((shift) => (
         <div key={shift.id} className="rounded-xl bg-[#1a1a1a] border border-white/8 px-4 py-3">
           <div className="flex items-center justify-between">
-            <p className="text-lg md:text-sm font-semibold md:font-medium text-white">
-              {formatDateLong(shift.date)}
-            </p>
+            <div>
+              <p className="text-lg md:text-sm font-semibold md:font-medium text-white">
+                {shift.employee}
+              </p>
+              <p className="text-sm text-white/40 mt-0.5">{formatDateLong(shift.date)}</p>
+            </div>
             <button
               onClick={() => onMenuClick(shift.id)}
               className={[
@@ -1332,18 +1335,19 @@ function BotellasCards({ records, onDelete }: { records: BottleRecord[]; onDelet
           <div className="flex items-center justify-between">
             <div className="min-w-0 mr-4">
               <p className="text-lg md:text-sm font-semibold md:font-medium text-white">{r.registeredBy}</p>
-              <p className="text-sm text-white/40 mt-0.5">{formatDateLong(r.registered_at.slice(0, 10))} · {formatTime(r.registered_at)}</p>
+              <p className="text-sm text-white/40 mt-0.5">{formatDateLong(r.registered_at.slice(0, 10))}</p>
+              <p className="text-sm text-white/40">{formatTime(r.registered_at)}</p>
             </div>
             <div className="flex items-center gap-3 shrink-0">
               <div className="flex items-center gap-4">
                 {r.jugos > 0 && (
-                  <div className="text-right">
+                  <div className="flex flex-col items-center">
                     <p className="text-[18px] font-semibold text-white tabular-nums">{r.jugos}</p>
                     <p className="text-sm text-white/40">jugos</p>
                   </div>
                 )}
                 {r.shots > 0 && (
-                  <div className="text-right">
+                  <div className="flex flex-col items-center">
                     <p className="text-[18px] font-semibold text-white tabular-nums">{r.shots}</p>
                     <p className="text-sm text-white/40">shots</p>
                   </div>

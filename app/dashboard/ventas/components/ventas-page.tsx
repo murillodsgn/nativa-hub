@@ -534,11 +534,32 @@ function SaleBottomSheet({
 
 // ── Summary cards ──────────────────────────────────────────────────────────────
 
-function SummaryCards({ sales }: { sales: Sale[] }) {
+const TOTAL_METAS: Record<DateFilterType, number> = {
+  hoy:    150,
+  semana: 960,
+  mes:    3840,
+};
+
+function SummaryCards({ sales, dateFilter }: { sales: Sale[]; dateFilter: DateFilterType }) {
   const isMobile = useIsMobile();
   const count = sales.length;
   const total = sales.reduce((s, v) => s + v.total, 0);
   const avg = count > 0 ? total / count : 0;
+  const meta = TOTAL_METAS[dateFilter];
+  const pct = Math.min((total / meta) * 100, 100);
+
+  const totalCard = (compact?: boolean) => (
+    <div className={compact ? "rounded-xl bg-[#1a1a1a] border border-white/8 px-3 py-2.5" : "rounded-xl bg-[#1a1a1a] border border-white/8 px-3 py-2.5 lg:px-4 lg:py-3"}>
+      <p className={compact ? "text-sm text-white/40 mb-1 leading-tight" : "text-[10px] lg:text-xs text-white/40 mb-1 leading-tight"}>Total en dinero</p>
+      <p className={compact ? "text-xl font-semibold tabular-nums" : "text-base lg:text-xl font-semibold tabular-nums"}>
+        <span className="text-white">{formatCurrency(total)}</span>
+        <span className="font-normal text-white/30 text-sm lg:text-base"> / {formatCurrency(meta)}</span>
+      </p>
+      <div className="h-1 w-full rounded-full bg-white/6 overflow-hidden mt-1.5">
+        <div className="h-full rounded-full" style={{ width: `${pct}%`, background: pct >= 100 ? "#86efac" : "#F1DAE7" }} />
+      </div>
+    </div>
+  );
 
   if (isMobile) {
     return (
@@ -553,10 +574,7 @@ function SummaryCards({ sales }: { sales: Sale[] }) {
             <p className="text-base font-medium text-white tabular-nums">{formatCurrency(avg)}</p>
           </div>
         </div>
-        <div className="rounded-xl bg-[#1a1a1a] border border-white/8 px-3 py-2.5">
-          <p className="text-sm text-white/40 mb-1 leading-tight">Total en dinero</p>
-          <p className="text-xl font-semibold text-white tabular-nums">{formatCurrency(total)}</p>
-        </div>
+        {totalCard(true)}
       </div>
     );
   }
@@ -571,10 +589,7 @@ function SummaryCards({ sales }: { sales: Sale[] }) {
         <p className="text-[10px] lg:text-xs text-white/40 mb-1 leading-tight">Promedio por venta</p>
         <p className="text-base lg:text-xl font-semibold text-white tabular-nums">{formatCurrency(avg)}</p>
       </div>
-      <div className="rounded-xl bg-[#1a1a1a] border border-white/8 px-3 py-2.5 lg:px-4 lg:py-3">
-        <p className="text-[10px] lg:text-xs text-white/40 mb-1 leading-tight">Total en dinero</p>
-        <p className="text-base lg:text-xl font-semibold text-white tabular-nums">{formatCurrency(total)}</p>
-      </div>
+      {totalCard()}
     </div>
   );
 }
@@ -686,8 +701,10 @@ function SalesTable({
               <td className="px-5 py-4 font-medium text-white whitespace-nowrap">
                 {sale.receipt_number ?? "--"}
               </td>
-              <td className="px-5 py-4 text-white/70 whitespace-nowrap">
-                {PAYMENT_METHOD_LABELS[sale.payment_method] ?? sale.payment_method}
+              <td className="px-5 py-4 whitespace-nowrap">
+                <span className="inline-flex items-center rounded-md bg-white/8 border border-white/10 px-2 py-0.5 text-xs text-white/70">
+                  {PAYMENT_METHOD_LABELS[sale.payment_method] ?? sale.payment_method}
+                </span>
               </td>
               <td className="px-5 py-4 text-right font-semibold text-white tabular-nums">
                 {formatCurrency(sale.total)}
@@ -744,12 +761,17 @@ function SaleCards({
           key={sale.id}
           className="rounded-xl bg-[#1a1a1a] border border-white/8 px-4 py-3"
         >
-          {/* Top row: receipt number + 3-dot menu */}
+          {/* Top row: receipt number + payment badge + 3-dot menu */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-lg md:text-sm font-semibold md:font-medium text-white">
-                {sale.receipt_number ?? `#${String(idx + 1).padStart(4, "0")}`}
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-lg md:text-sm font-semibold md:font-medium text-white">
+                  {sale.receipt_number ?? `#${String(idx + 1).padStart(4, "0")}`}
+                </p>
+                <span className="inline-flex items-center rounded-md bg-white/8 border border-white/10 px-2 py-0.5 text-xs text-white/70">
+                  {PAYMENT_METHOD_LABELS[sale.payment_method] ?? sale.payment_method}
+                </span>
+              </div>
               <p className="text-sm text-white/40 mt-0.5">{formatDate(sale.created_at)}</p>
             </div>
             <button
@@ -767,14 +789,9 @@ function SaleCards({
 
           {/* Bottom section */}
           <div className="flex items-end justify-between mt-2 pt-3 border-t border-white/6">
-            <div>
-              <p className="text-sm text-white/55">
-                {PAYMENT_METHOD_LABELS[sale.payment_method] ?? sale.payment_method}
-              </p>
-              <p className="text-sm text-white/30 mt-0.5">
-                {formatTime(sale.created_at)}
-              </p>
-            </div>
+            <p className="text-sm text-white/55">
+              {formatTime(sale.created_at)}
+            </p>
             <p className="text-[18px] font-semibold text-white tabular-nums">
               {formatCurrency(sale.total)}
             </p>
@@ -859,7 +876,7 @@ export function VentasPage({ sales, role }: { sales: Sale[]; role: string }) {
 
       {/* Summary cards */}
       <div className="mt-4">
-        <SummaryCards sales={filtered} />
+        <SummaryCards sales={filtered} dateFilter={dateFilter} />
       </div>
 
       {/* Table / cards */}
