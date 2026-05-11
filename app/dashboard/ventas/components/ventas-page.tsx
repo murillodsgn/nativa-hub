@@ -48,6 +48,7 @@ function formatTime(iso: string) {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
+    timeZone: "America/Panama",
   });
 }
 
@@ -55,7 +56,11 @@ const MONTHS_ES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio
 
 function formatDate(iso: string) {
   const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`;
+  const tz = { timeZone: "America/Panama" } as const;
+  const day   = new Intl.DateTimeFormat("es-MX", { ...tz, day:   "numeric" }).format(d);
+  const month = new Intl.DateTimeFormat("es-MX", { ...tz, month: "long"    }).format(d);
+  const year  = new Intl.DateTimeFormat("es-MX", { ...tz, year:  "numeric" }).format(d);
+  return `${day} ${month} ${year}`;
 }
 
 function startOfDay(d: Date) {

@@ -542,13 +542,15 @@ function groupByDay(
   const groups: { dayKey: string; dayLabel: string; items: MovementWithUser[] }[] = [];
   for (const m of movements) {
     const d = new Date(m.created_at);
-    const dayKey = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const tz = { timeZone: "America/Panama" } as const;
+    const dayKey = d.toLocaleDateString("en-CA", tz);
     const existing = groups.find((g) => g.dayKey === dayKey);
     if (existing) {
       existing.items.push(m);
     } else {
-      const month = d.toLocaleDateString("es-MX", { month: "long" }).toUpperCase();
-      const dayLabel = `${d.getDate()} ${month} ${d.getFullYear()}`;
+      const [y,, dy] = dayKey.split("-").map(Number);
+      const month = new Intl.DateTimeFormat("es-MX", { ...tz, month: "long" }).format(d).toUpperCase();
+      const dayLabel = `${dy} ${month} ${y}`;
       groups.push({ dayKey, dayLabel, items: [m] });
     }
   }
@@ -568,6 +570,7 @@ function MovementRow({
     hour: "numeric",
     minute: "2-digit",
     hour12: false,
+    timeZone: "America/Panama",
   });
   const label = mvLabel(movement.type);
   const tag = mvTag(movement.type);

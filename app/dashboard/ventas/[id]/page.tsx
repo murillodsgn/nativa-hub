@@ -18,14 +18,11 @@ const MONTHS_ES = [
 
 function formatDateTime(iso: string) {
   const d = new Date(iso);
-  const day = d.getDate();
-  const month = MONTHS_ES[d.getMonth()];
-  const year = d.getFullYear();
-  const time = d.toLocaleTimeString("es-MX", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const tz = { timeZone: "America/Panama" } as const;
+  const day   = new Intl.DateTimeFormat("es-MX", { ...tz, day:   "numeric" }).format(d);
+  const month = new Intl.DateTimeFormat("es-MX", { ...tz, month: "long"    }).format(d);
+  const year  = new Intl.DateTimeFormat("es-MX", { ...tz, year:  "numeric" }).format(d);
+  const time  = d.toLocaleTimeString("es-MX", { ...tz, hour: "numeric", minute: "2-digit", hour12: true });
   return `${day} de ${month} de ${year} · ${time}`;
 }
 
