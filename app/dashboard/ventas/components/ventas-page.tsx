@@ -63,16 +63,34 @@ function formatDate(iso: string) {
   return `${day} ${month} ${year}`;
 }
 
-function startOfDay(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const TZ = "America/Panama";
+
+// Returns the calendar date components for a moment in Panama timezone
+function panamaDateParts(d: Date) {
+  return {
+    year:  Number(new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year:  "numeric" }).format(d)),
+    month: Number(new Intl.DateTimeFormat("en-CA", { timeZone: TZ, month: "numeric" }).format(d)) - 1, // 0-based
+    day:   Number(new Intl.DateTimeFormat("en-CA", { timeZone: TZ, day:   "numeric" }).format(d)),
+  };
 }
-function startOfWeek(d: Date) {
-  const day = d.getDay();
-  const diff = day === 0 ? 6 : day - 1;
+
+// Midnight Panama time = 05:00 UTC (UTC-5, no DST)
+function startOfDay(d: Date): Date {
+  const { year, month, day } = panamaDateParts(d);
+  return new Date(Date.UTC(year, month, day, 5, 0, 0));
+}
+
+function startOfWeek(d: Date): Date {
+  const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const dayName = new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "short" }).format(d);
+  const dow = DOW.indexOf(dayName); // 0=Sun … 6=Sat
+  const diff = dow === 0 ? 6 : dow - 1; // days since Monday
   return new Date(startOfDay(d).getTime() - diff * 86_400_000);
 }
-function startOfMonth(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), 1);
+
+function startOfMonth(d: Date): Date {
+  const { year, month } = panamaDateParts(d);
+  return new Date(Date.UTC(year, month, 1, 5, 0, 0));
 }
 
 // ── Filter constants ───────────────────────────────────────────────────────────
@@ -823,16 +841,24 @@ export function VentasPage({ sales, role }: { sales: Sale[]; role: string }) {
 
   const filtered = useMemo(() => {
     const now = new Date();
+    const rangeStart =
+      dateFilter === "hoy"    ? startOfDay(now) :
+      dateFilter === "semana" ? startOfWeek(now) :
+                                startOfMonth(now);
+    const rangeEnd = dateFilter === "hoy"
+      ? new Date(startOfDay(now).getTime() + 86_400_000)
+      : null;
+
+    console.log(
+      `[ventas filter] mode=${dateFilter} | pool=${sales.length} sales`,
+      `| start=${rangeStart.toISOString()}`,
+      rangeEnd ? `| end=${rangeEnd.toISOString()}` : "| end=now"
+    );
+
     return sales.filter((sale) => {
       const saleDate = new Date(sale.created_at);
-      if (dateFilter === "hoy") {
-        const start = startOfDay(now);
-        if (saleDate < start || saleDate >= new Date(start.getTime() + 86_400_000)) return false;
-      } else if (dateFilter === "semana") {
-        if (saleDate < startOfWeek(now)) return false;
-      } else if (dateFilter === "mes") {
-        if (saleDate < startOfMonth(now)) return false;
-      }
+      if (saleDate < rangeStart) return false;
+      if (rangeEnd && saleDate >= rangeEnd) return false;
       if (!selectedMethods.has(sale.payment_method)) return false;
       return true;
     });

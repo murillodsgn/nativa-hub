@@ -11,17 +11,17 @@ export default async function VentasRoute() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // Today's date range (UTC)
+  // Start of current month in Panama timezone (UTC-5, no DST): 1st of month at 05:00 UTC
   const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-  const tomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toISOString();
+  const panamaYear  = Number(new Intl.DateTimeFormat("en-CA", { timeZone: "America/Panama", year:  "numeric" }).format(now));
+  const panamaMonth = Number(new Intl.DateTimeFormat("en-CA", { timeZone: "America/Panama", month: "numeric" }).format(now)) - 1; // 0-based
+  const monthStart  = new Date(Date.UTC(panamaYear, panamaMonth, 1, 5, 0, 0)).toISOString();
 
   const [{ data: salesData, error: salesErr }, { data: profile }] = await Promise.all([
     supabase
       .from("sales")
       .select("id, origin, user_id, subtotal, discount, total, payment_method, reference_number, notes, receipt_number, created_at")
-      .gte("created_at", todayStart)
-      .lt("created_at", tomorrowStart)
+      .gte("created_at", monthStart)
       .order("created_at", { ascending: false }),
     supabase.from("profiles").select("role").eq("id", user.id).maybeSingle(),
   ]);
