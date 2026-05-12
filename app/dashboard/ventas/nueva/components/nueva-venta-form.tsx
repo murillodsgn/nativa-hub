@@ -22,7 +22,7 @@ import { Stepper } from "@/components/ui/stepper";
 import { createVenta } from "../../actions";
 import styles from "./nueva-venta-form.module.css";
 
-const CATEGORIES = ["Jugos", "Shots", "Bites", "Planes"];
+const CATEGORIES = ["Jugos", "Shots", "Bites", "Planes", "Servicios"];
 const NEEDS_REFERENCE = new Set(["tarjeta", "pedidos_ya"]);
 
 const PAYMENT_OPTIONS: { value: string; label: string; icon: LucideIcon }[] = [
